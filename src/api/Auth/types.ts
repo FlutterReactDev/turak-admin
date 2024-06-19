@@ -46,3 +46,9 @@ export interface UserResetPassword {
   newPassword: string;
   confirmNewPassword: string;
 }
+
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}

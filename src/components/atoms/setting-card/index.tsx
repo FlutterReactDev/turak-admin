@@ -10,6 +10,7 @@ type SettingsCardProps = {
   to: string;
   externalLink?: string;
   disabled?: boolean;
+  from?: string;
 };
 
 export const SettingsCard: React.FC<SettingsCardProps> = ({
@@ -18,9 +19,10 @@ export const SettingsCard: React.FC<SettingsCardProps> = ({
   description,
   to,
   disabled = false,
+  from,
 }) => {
   return (
-    <Link to={to}>
+    <Link to={to} search={(prev) => ({ ...prev, from })}>
       <Button disabled={disabled} variant={"outline"} className="h-20 w-full">
         <div className="flex items-center justify-center ">
           <div className="flex items-center justify-center overflow-hidden">

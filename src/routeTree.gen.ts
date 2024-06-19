@@ -18,6 +18,7 @@ import { Route as AIndexImport } from './routes/a/index'
 import { Route as ResetPasswordCodeImport } from './routes/reset-password/$code'
 import { Route as ALayoutImport } from './routes/a/_layout'
 import { Route as ALayoutCalendarIndexImport } from './routes/a/_layout/calendar/index'
+import { Route as ALayoutSettingsChangePasswordIndexImport } from './routes/a/_layout/settings/change-password/index'
 import { Route as ALayoutObjectsIdIndexImport } from './routes/a/_layout/objects/$id/index'
 import { Route as ALayoutRoomsIdEditImport } from './routes/a/_layout/rooms/$id/edit'
 import { Route as ALayoutObjectsIdRoomsIndexImport } from './routes/a/_layout/objects/$id/rooms/index'
@@ -108,6 +109,12 @@ const ALayoutSettingsPersonalInformationIndexLazyRoute =
     ),
   )
 
+const ALayoutSettingsChangePasswordIndexRoute =
+  ALayoutSettingsChangePasswordIndexImport.update({
+    path: '/settings/change-password/',
+    getParentRoute: () => ALayoutRoute,
+  } as any)
+
 const ALayoutObjectsIdIndexRoute = ALayoutObjectsIdIndexImport.update({
   path: '/objects/$id/',
   getParentRoute: () => ALayoutRoute,
@@ -192,6 +199,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ALayoutObjectsIdIndexImport
       parentRoute: typeof ALayoutImport
     }
+    '/a/_layout/settings/change-password/': {
+      preLoaderRoute: typeof ALayoutSettingsChangePasswordIndexImport
+      parentRoute: typeof ALayoutImport
+    }
     '/a/_layout/settings/personal-information/': {
       preLoaderRoute: typeof ALayoutSettingsPersonalInformationIndexLazyImport
       parentRoute: typeof ALayoutImport
@@ -217,6 +228,7 @@ export const routeTree = rootRoute.addChildren([
       ALayoutRoomsIdEditRoute,
       ALayoutObjectsIdEditLazyRoute,
       ALayoutObjectsIdIndexRoute,
+      ALayoutSettingsChangePasswordIndexRoute,
       ALayoutSettingsPersonalInformationIndexLazyRoute,
       ALayoutObjectsIdRoomsIndexRoute,
     ]),

@@ -1,5 +1,5 @@
 import { useGetAllObjectsQuery } from "@/api/Object";
-import { CalendarCard } from "@/components/molecules/calendar-card";
+import { CalendarCard } from "@/domains/calendar/ui/calendar-card";
 import {
   Page,
   PageContent,

@@ -1,6 +1,7 @@
 import { baseApi } from "../Base";
 import { BaseResponse } from "../Base/types";
 import {
+  ChangePasswordRequest,
   LoginData,
   RefreshTokenData,
   UserLoginData,
@@ -49,6 +50,7 @@ const authApi = baseApi.injectEndpoints({
           token,
         },
       }),
+      invalidatesTags: ["auth"],
     }),
     getVerifyEmail: build.query({
       query: () => ({
@@ -62,13 +64,15 @@ const authApi = baseApi.injectEndpoints({
         body: data,
         method: "POST",
       }),
+      invalidatesTags: ["auth"],
     }),
-    changePassword: build.mutation({
+    changePassword: build.mutation<BaseResponse<null>, ChangePasswordRequest>({
       query: (data) => ({
         url: "/ChangePassword",
         body: data,
         method: "POST",
       }),
+      invalidatesTags: ["auth"],
     }),
     logout: build.mutation<void, void>({
       query: () => ({

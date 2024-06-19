@@ -1,9 +1,10 @@
+import { ChangePasswordForm } from "@/components/molecules/change-password-form";
 import { Section } from "@/components/molecules/section";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 
-export const PersonalInformationPage = () => {
+export const ChangePasswordPage = () => {
   return (
     <div className="grid grid-cols-2">
       <div className="w-full">
@@ -17,9 +18,11 @@ export const PersonalInformationPage = () => {
         </div>
 
         <Section
-          title="Персональная информация"
-          description="Управляйте своим профилем"
-        ></Section>
+          title="Изменить пароль"
+          description="Изменение пароля на основе старого"
+        >
+          <ChangePasswordForm />
+        </Section>
       </div>
     </div>
   );

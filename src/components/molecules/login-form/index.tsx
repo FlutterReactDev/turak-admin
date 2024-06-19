@@ -103,7 +103,7 @@ export function LoginForm() {
                       <div className="flex items-center">
                         <FormLabel>Пароль</FormLabel>
                         <Link
-                          href="#"
+                          to="/reset-password"
                           className="ml-auto inline-block text-sm underline"
                         >
                           Забыли пароль?

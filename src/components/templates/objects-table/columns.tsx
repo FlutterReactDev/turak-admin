@@ -18,6 +18,8 @@ import { Marker2GIS } from "@/components/atoms/2GIS/Marker2GIS";
 import { SmokingBadge } from "@/components/molecules/smoking-badge";
 import { PaymentTypeBadge } from "@/components/molecules/payment-type-badge";
 import { DataTableRowActions } from "./data-table-actions";
+import { getImageUrl } from "@/lib/get-image-url";
+import { UploadMediaType } from "@/types/shared";
 
 export const columns: ColumnDef<ObjectT>[] = [
   {
@@ -42,6 +44,27 @@ export const columns: ColumnDef<ObjectT>[] = [
         aria-label="Select row"
       />
     ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    id: "image",
+    cell: ({ row }) => {
+      const cell = row.original;
+      if (cell.anObjectImages.length) {
+        return (
+          <img
+            src={getImageUrl({
+              fileName: cell.anObjectImages[0].fileName,
+              type: UploadMediaType.OBJECT,
+            })}
+            alt={cell.anObjectImages[0].fileName}
+            className="min-w-14 h-14 rounded-sm"
+          />
+        );
+      }
+      return <div className="rounded-sm min-w-14 h-14 bg-muted"></div>;
+    },
     enableSorting: false,
     enableHiding: false,
   },

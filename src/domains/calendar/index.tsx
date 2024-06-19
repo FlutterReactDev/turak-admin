@@ -1,3 +1,5 @@
+import { useGetAllObjectsQuery } from "@/api/Object";
+import { CalendarCard } from "@/components/molecules/calendar-card";
 import {
   Page,
   PageContent,
@@ -7,13 +9,10 @@ import {
 } from "@/components/organisms/page";
 
 import { AddBookingButton } from "@/components/templates/calendar-timeline/components/add-booking-button";
-import { NewBookingBtn } from "@/components/templates/calendar/components/ui/NewBookingBtn";
-import { App } from "@/components/templates/calendar/components/ui/app";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Container, FocusModal } from "@medusajs/ui";
+import { Container } from "@medusajs/ui";
 
 export const CalendarPage = () => {
+  const { data, isSuccess } = useGetAllObjectsQuery();
   return (
     <Page>
       <Container>
@@ -25,7 +24,7 @@ export const CalendarPage = () => {
         </PageHeader>
 
         <PageContent>
-          <FocusModal>
+          {/* <FocusModal>
             <FocusModal.Trigger>
               <Button>Календарь бронирования</Button>
             </FocusModal.Trigger>
@@ -48,7 +47,13 @@ export const CalendarPage = () => {
                 </FocusModal.Body>
               </FocusModal.Content>
             </Tabs>
-          </FocusModal>
+          </FocusModal> */}
+          <div className="grid grid-cols-3 gap-4 mt-5">
+            {isSuccess &&
+              data.result.map((data) => {
+                return <CalendarCard {...data} />;
+              })}
+          </div>
         </PageContent>
       </Container>
     </Page>

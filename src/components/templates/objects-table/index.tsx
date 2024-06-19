@@ -106,11 +106,10 @@ export function ObjectsTable<TData, TValue>(
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   onClick={(e) => {
-                    console.log(e.target);
-
                     if (
-                      e.target.getAttribute("role") != "checkbox" &&
-                      e.target.getAttribute("role") != "menuitem"
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      //@ts-ignore
+                      e.target.getAttribute("role") != "checkbox" && e.target.getAttribute("role") != "menuitem"
                     ) {
                       const object = row.original as ObjectT;
                       navigate({

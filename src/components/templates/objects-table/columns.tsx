@@ -28,6 +28,9 @@ export const columns: ColumnDef<ObjectT>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />

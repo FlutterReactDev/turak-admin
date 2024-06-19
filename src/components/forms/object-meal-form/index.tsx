@@ -14,11 +14,16 @@ import { Switch } from "@/components/ui/switch";
 import { NestedForm } from "@/utils/nested-from";
 import { FC } from "react";
 import { ObjectMealType } from "./schema";
+import { ObjectFormCard } from "../types";
 
-interface ObjectMealFormProps {
+interface ObjectMealFormProps extends ObjectFormCard {
   form: NestedForm<ObjectMealType>;
 }
-export const ObjectMealForm: FC<ObjectMealFormProps> = ({ form }) => {
+export const ObjectMealForm: FC<ObjectMealFormProps> = ({
+  form,
+  noBorder,
+  noTitle,
+}) => {
   const { control, path, watch } = form;
   const allInclusive = watch(path("allInclusive"));
   const breakfast = watch(path("breakfast"));
@@ -28,6 +33,8 @@ export const ObjectMealForm: FC<ObjectMealFormProps> = ({ form }) => {
     <FormCard
       title="Питание"
       description="Информация о питании появится во всех категориях номеров"
+      noBorder={noBorder}
+      noTitle={noTitle}
     >
       <FormField
         control={control}

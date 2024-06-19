@@ -9,15 +9,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-interface ObjectAdditionalComfortFormProps {
+import { ObjectFormCard } from "../types";
+interface ObjectAdditionalComfortFormProps extends ObjectFormCard {
   form: NestedForm<ObjectAdditionalComfortType>;
 }
 export const ObjectAdditionalComfortForm: FC<
   ObjectAdditionalComfortFormProps
-> = ({ form }) => {
+> = ({ form, noBorder, noTitle }) => {
   const { control, path } = form;
   return (
-    <FormCard title="Удобства и услуги" description="">
+    <FormCard title="Удобства и услуги" description="" noBorder={noBorder} noTitle={noTitle}>
       <div className="grid grid-cols-2 gap-2">
         <FormField
           control={control}

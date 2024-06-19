@@ -23,13 +23,14 @@ import {
 } from "@tanstack/react-table";
 import { CSSProperties, useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 interface ObjectsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function ObjectsTable<TData, TValue>(
+export function RoomsTable<TData, TValue>(
   props: ObjectsTableProps<TData, TValue>
 ) {
   const { columns, data } = props;
@@ -72,6 +73,7 @@ export function ObjectsTable<TData, TValue>(
   };
   return (
     <div className="space-y-4">
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

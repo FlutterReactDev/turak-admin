@@ -9,11 +9,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ObjectFormCard } from "../types";
 
-interface RoomAmenitiesFormProps {
+interface RoomAmenitiesFormProps extends ObjectFormCard {
   form: NestedForm<RoomAmenitiesType>;
 }
-export const RoomAmenitiesForm: FC<RoomAmenitiesFormProps> = ({ form }) => {
+export const RoomAmenitiesForm: FC<RoomAmenitiesFormProps> = ({
+  form,
+  noBorder,
+  noTitle,
+}) => {
   const { control, path } = form;
   return (
     <FormCard
@@ -21,6 +26,8 @@ export const RoomAmenitiesForm: FC<RoomAmenitiesFormProps> = ({ form }) => {
       description="Популярные услуги и удобства, на которые чаще всего обращают
         внимание гости при поиске жилья. После публикации можно добавить
         другие"
+      noBorder={noBorder}
+      noTitle={noTitle}
     >
       <div className="grid grid-cols-2 gap-2">
         <FormField

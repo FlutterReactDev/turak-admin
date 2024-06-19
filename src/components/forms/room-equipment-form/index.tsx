@@ -18,7 +18,7 @@ export const RoomEquipmentForm: FC<RoomEquipmentFormProps> = ({ form }) => {
   const { control, path } = form;
 
   return (
-    <FormCard title="Оснащение" description="">
+    <FormCard title="Оснащение" description="" noBorder noTitle>
       <FormField
         control={control}
         name={path("balcony")}

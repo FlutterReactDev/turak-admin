@@ -1,4 +1,3 @@
-import { useUploadMediaMutation } from "@/api/Media";
 import { useCreateMutation } from "@/api/Object";
 import { AddressForm } from "@/components/forms/address-form";
 import { addressFormSchema } from "@/components/forms/address-form/schema";
@@ -23,6 +22,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { usePrompt } from "@/hooks/use-prompt";
 import { isFetchBaseQueryError } from "@/lib/server-error-handler";
+import Api from "@/services/api";
 import { UploadMediaType } from "@/types/shared";
 import { nestedForm } from "@/utils/nested-from";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,7 +31,6 @@ import { Loader2, PlusIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { InferType, array, mixed, object, string } from "yup";
-import Api from "@/services/api";
 enum Tab {
   TYPE = "type",
   LOCATION = "location",
@@ -666,7 +665,10 @@ export const NewObject = () => {
                   className="h-full w-full max-w-[720px]"
                 >
                   <div className="grid grid-cols-1 gap-5">
-                    <ObjectGeneralForm form={nestedForm(form, "general")} />
+                    <ObjectGeneralForm
+                      form={nestedForm(form, "general")}
+                      noBorder
+                    />
                   </div>
                 </ProgressTabs.Content>
                 <ProgressTabs.Content
@@ -674,7 +676,10 @@ export const NewObject = () => {
                   className="h-full w-full max-w-[720px]"
                 >
                   <div className="grid grid-cols-1 gap-5">
-                    <ObjectDetailForm form={nestedForm(form, "detail")} />
+                    <ObjectDetailForm
+                      form={nestedForm(form, "detail")}
+                      noBorder
+                    />
                   </div>
                 </ProgressTabs.Content>
                 <ProgressTabs.Content
@@ -684,6 +689,7 @@ export const NewObject = () => {
                   <div className="grid grid-cols-1 gap-5">
                     <ObjectAdditionalComfortForm
                       form={nestedForm(form, "additionalComfort")}
+                      noBorder
                     />
                   </div>
                 </ProgressTabs.Content>
@@ -692,7 +698,7 @@ export const NewObject = () => {
                   className="h-full w-full max-w-[720px]"
                 >
                   <div className="grid grid-cols-1 gap-5">
-                    <ObjectMealForm form={nestedForm(form, "meal")} />
+                    <ObjectMealForm form={nestedForm(form, "meal")} noBorder />
                   </div>
                 </ProgressTabs.Content>
                 <ProgressTabs.Content
@@ -702,6 +708,7 @@ export const NewObject = () => {
                   <div className="grid grid-cols-1 gap-5">
                     <ObjectFeeAdditionalServiceForm
                       form={nestedForm(form, "additionalService")}
+                      noBorder
                     />
                   </div>
                 </ProgressTabs.Content>
@@ -710,7 +717,7 @@ export const NewObject = () => {
                   className="h-full w-full max-w-[720px]"
                 >
                   <div className="grid grid-cols-1 gap-5">
-                    <MediaForm form={nestedForm(form, "media")} />
+                    <MediaForm form={nestedForm(form, "media")} noBorder />
                   </div>
                 </ProgressTabs.Content>
               </Form>

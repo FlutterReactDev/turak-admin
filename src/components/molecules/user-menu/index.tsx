@@ -49,7 +49,11 @@ export const UserMenu = () => {
             <User />
           </Button>
           <div className="flex flex-col ">
-            <div className="text-sm">{data?.result.name}</div>
+            <div className="flex gap-1">
+              <div className="text-sm">{data?.result.name}</div>
+              <div className="text-sm">{data?.result.surname}</div>
+            </div>
+
             <div className="text-sm font-medium">{data?.result.email}</div>
           </div>
           <div>

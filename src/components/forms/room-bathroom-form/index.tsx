@@ -7,19 +7,30 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FormLabel } from "@chakra-ui/react";
+
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ObjectFormCard } from "../types";
 
-interface RoomBathroomFormProps {
+interface RoomBathroomFormProps extends ObjectFormCard {
   form: NestedForm<RoomBathroomType>;
 }
-export const RoomBathroomForm: FC<RoomBathroomFormProps> = ({ form }) => {
+export const RoomBathroomForm: FC<RoomBathroomFormProps> = ({
+  form,
+  noBorder,
+  noTitle,
+}) => {
   const { path, control } = form;
   return (
-    <FormCard title="Ванная комната" description="">
+    <FormCard
+      title="Ванная комната"
+      description=""
+      noBorder={noBorder}
+      noTitle={noTitle}
+    >
       <FormField
         control={control}
         name={path("numberOfBathroomsWithToilet")}

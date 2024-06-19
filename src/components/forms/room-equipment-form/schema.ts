@@ -1,4 +1,4 @@
-import { boolean, object } from "yup";
+import { InferType, boolean, object } from "yup";
 
 export const roomEquipmentSchema = object({
   balcony: boolean().required(),
@@ -47,5 +47,4 @@ export const roomEquipmentSchema = object({
   blackoutCurtains: boolean().required(),
 });
 
-
-export type RoomEquipmentSchmea
+export type RoomEquipmentType = InferType<typeof roomEquipmentSchema>;

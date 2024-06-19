@@ -18,7 +18,7 @@ export const RoomKitchenEquipmentForm: FC<RoomKitchenEquipmentFormProps> = ({
 }) => {
   const { control, path } = form;
   return (
-    <FormCard title="Кухонное оборудование" description="">
+    <FormCard title="Кухонное оборудование" description="" noBorder noTitle>
       <div className="grid grid-cols-2 gap-2">
         <FormField
           control={control}

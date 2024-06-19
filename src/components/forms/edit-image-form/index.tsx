@@ -31,6 +31,7 @@ interface EditImageFormProps {
   id: number;
   refetch: () => void;
   setOpen: (value: boolean) => void;
+  uploadMediaType: UploadMediaType;
 }
 
 export const EditImageForm: FC<EditImageFormProps> = ({
@@ -40,6 +41,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
   id,
   setOpen,
   refetch,
+  uploadMediaType,
 }) => {
   const { control, path } = form;
   const { fields, remove } = useFieldArray({
@@ -71,7 +73,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
       const file = await fetch(
         getImageUrl({
           fileName: fields[activeSlide].fileName,
-          type: UploadMediaType.OBJECT,
+          type: uploadMediaType,
         }),
         {
           method: "get",
@@ -107,7 +109,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
       try {
         await Api.uploads.create(files, {
           ID: id,
-          uploadMediaType: UploadMediaType.OBJECT,
+          uploadMediaType: uploadMediaType,
         });
         refetch();
       } catch (error) {
@@ -129,7 +131,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
               <Images />
 
               <h5 className="scroll-m-20 text-xl font-semibold tracking-tight overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-[500px] w-full">
-                {fields[activeSlide].fileName}
+                {fields[activeSlide]?.fileName}
               </h5>
             </div>
           )}
@@ -192,7 +194,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
                             className="w-full h-[180px] object-cover rounded-xl bg-white border p-1"
                             src={getImageUrl({
                               fileName,
-                              type: UploadMediaType.OBJECT,
+                              type: uploadMediaType,
                             })}
                             alt={fileName}
                           />
@@ -248,7 +250,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
                           <img
                             src={getImageUrl({
                               fileName,
-                              type: UploadMediaType.OBJECT,
+                              type: uploadMediaType,
                             })}
                             alt={fileName}
                             className="w-full h-full object-cover user-select-none"
@@ -286,7 +288,7 @@ export const EditImageForm: FC<EditImageFormProps> = ({
                             className="rounded-lg h-full w-full"
                             src={getImageUrl({
                               fileName,
-                              type: UploadMediaType.OBJECT,
+                              type: uploadMediaType,
                             })}
                             alt={fileName}
                           />

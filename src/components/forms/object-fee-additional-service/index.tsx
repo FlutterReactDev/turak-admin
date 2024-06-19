@@ -16,14 +16,15 @@ import { Input } from "@/components/ui/input";
 import { ReportingDocumentTypeSelect } from "@/components/molecules/reporting-document-type-select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { ObjectFormCard } from "../types";
 
-interface ObjectFeeAdditionalServiceFormProps {
+interface ObjectFeeAdditionalServiceFormProps extends ObjectFormCard {
   form: NestedForm<ObjectFeeAdditionalServiceType>;
 }
 
 export const ObjectFeeAdditionalServiceForm: FC<
   ObjectFeeAdditionalServiceFormProps
-> = ({ form }) => {
+> = ({ form, noBorder, noTitle }) => {
   const { path, control, watch } = form;
   const cleaning = watch(path("cleaning"));
   const bedLinen = watch(path("bedLinen"));
@@ -31,6 +32,8 @@ export const ObjectFeeAdditionalServiceForm: FC<
   return (
     <FormCard
       title="Плата за дополнительные услуги"
+      noBorder={noBorder}
+      noTitle={noTitle}
       description="Это дополнительные услуги, их можно предоставить только по запросу
   гостя или с его согласия. Стоимость этих услуг не включается в
   расчёт общей цены при бронировании. Если у вас есть обязательная

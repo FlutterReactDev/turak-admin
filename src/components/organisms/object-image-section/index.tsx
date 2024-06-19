@@ -139,6 +139,7 @@ export const ObjectImageSection: FC<ObjectImageSectionProps> = ({
           form={form}
           isOpen={imageModalOpen}
           editMode={editMode}
+          uploadMediaType={UploadMediaType.OBJECT}
         />
       )}
     </Section>

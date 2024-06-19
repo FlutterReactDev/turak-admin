@@ -27,6 +27,8 @@ export const RoomPostingRulesForm: FC<RoomPostingRulesFormProps> = ({
       title="Правила размещения"
       description="Правила проживания можно будет всегда настроить после публикации
               объявления на странице «Настройки бронирования»."
+      noBorder
+      noTitle
     >
       <FormField
         control={control}

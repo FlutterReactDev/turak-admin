@@ -17,10 +17,9 @@ import { Route as ResetPasswordIndexImport } from './routes/reset-password/index
 import { Route as AIndexImport } from './routes/a/index'
 import { Route as ResetPasswordCodeImport } from './routes/reset-password/$code'
 import { Route as ALayoutImport } from './routes/a/_layout'
-import { Route as ALayoutObjectsIndexImport } from './routes/a/_layout/objects/index'
 import { Route as ALayoutCalendarIndexImport } from './routes/a/_layout/calendar/index'
 import { Route as ALayoutObjectsIdIndexImport } from './routes/a/_layout/objects/$id/index'
-import { Route as ALayoutObjectsIdEditImport } from './routes/a/_layout/objects/$id/edit'
+import { Route as ALayoutRoomsIdEditImport } from './routes/a/_layout/rooms/$id/edit'
 import { Route as ALayoutObjectsIdRoomsIndexImport } from './routes/a/_layout/objects/$id/rooms/index'
 
 // Create Virtual Routes
@@ -29,6 +28,14 @@ const AImport = createFileRoute('/a')()
 const RegisterLazyImport = createFileRoute('/register')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
+const ALayoutSettingsIndexLazyImport = createFileRoute('/a/_layout/settings/')()
+const ALayoutObjectsIndexLazyImport = createFileRoute('/a/_layout/objects/')()
+const ALayoutSettingsPersonalInformationIndexLazyImport = createFileRoute(
+  '/a/_layout/settings/personal-information/',
+)()
+const ALayoutObjectsIdEditLazyImport = createFileRoute(
+  '/a/_layout/objects/$id/edit',
+)()
 
 // Create/Update Routes
 
@@ -72,23 +79,49 @@ const ALayoutRoute = ALayoutImport.update({
   getParentRoute: () => ARoute,
 } as any)
 
-const ALayoutObjectsIndexRoute = ALayoutObjectsIndexImport.update({
+const ALayoutSettingsIndexLazyRoute = ALayoutSettingsIndexLazyImport.update({
+  path: '/settings/',
+  getParentRoute: () => ALayoutRoute,
+} as any).lazy(() =>
+  import('./routes/a/_layout/settings/index.lazy').then((d) => d.Route),
+)
+
+const ALayoutObjectsIndexLazyRoute = ALayoutObjectsIndexLazyImport.update({
   path: '/objects/',
   getParentRoute: () => ALayoutRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/a/_layout/objects/index.lazy').then((d) => d.Route),
+)
 
 const ALayoutCalendarIndexRoute = ALayoutCalendarIndexImport.update({
   path: '/calendar/',
   getParentRoute: () => ALayoutRoute,
 } as any)
 
+const ALayoutSettingsPersonalInformationIndexLazyRoute =
+  ALayoutSettingsPersonalInformationIndexLazyImport.update({
+    path: '/settings/personal-information/',
+    getParentRoute: () => ALayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/a/_layout/settings/personal-information/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 const ALayoutObjectsIdIndexRoute = ALayoutObjectsIdIndexImport.update({
   path: '/objects/$id/',
   getParentRoute: () => ALayoutRoute,
 } as any)
 
-const ALayoutObjectsIdEditRoute = ALayoutObjectsIdEditImport.update({
+const ALayoutObjectsIdEditLazyRoute = ALayoutObjectsIdEditLazyImport.update({
   path: '/objects/$id/edit',
+  getParentRoute: () => ALayoutRoute,
+} as any).lazy(() =>
+  import('./routes/a/_layout/objects/$id/edit.lazy').then((d) => d.Route),
+)
+
+const ALayoutRoomsIdEditRoute = ALayoutRoomsIdEditImport.update({
+  path: '/rooms/$id/edit',
   getParentRoute: () => ALayoutRoute,
 } as any)
 
@@ -140,15 +173,27 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof ALayoutImport
     }
     '/a/_layout/objects/': {
-      preLoaderRoute: typeof ALayoutObjectsIndexImport
+      preLoaderRoute: typeof ALayoutObjectsIndexLazyImport
+      parentRoute: typeof ALayoutImport
+    }
+    '/a/_layout/settings/': {
+      preLoaderRoute: typeof ALayoutSettingsIndexLazyImport
+      parentRoute: typeof ALayoutImport
+    }
+    '/a/_layout/rooms/$id/edit': {
+      preLoaderRoute: typeof ALayoutRoomsIdEditImport
       parentRoute: typeof ALayoutImport
     }
     '/a/_layout/objects/$id/edit': {
-      preLoaderRoute: typeof ALayoutObjectsIdEditImport
+      preLoaderRoute: typeof ALayoutObjectsIdEditLazyImport
       parentRoute: typeof ALayoutImport
     }
     '/a/_layout/objects/$id/': {
       preLoaderRoute: typeof ALayoutObjectsIdIndexImport
+      parentRoute: typeof ALayoutImport
+    }
+    '/a/_layout/settings/personal-information/': {
+      preLoaderRoute: typeof ALayoutSettingsPersonalInformationIndexLazyImport
       parentRoute: typeof ALayoutImport
     }
     '/a/_layout/objects/$id/rooms/': {
@@ -167,9 +212,12 @@ export const routeTree = rootRoute.addChildren([
   ARoute.addChildren([
     ALayoutRoute.addChildren([
       ALayoutCalendarIndexRoute,
-      ALayoutObjectsIndexRoute,
-      ALayoutObjectsIdEditRoute,
+      ALayoutObjectsIndexLazyRoute,
+      ALayoutSettingsIndexLazyRoute,
+      ALayoutRoomsIdEditRoute,
+      ALayoutObjectsIdEditLazyRoute,
       ALayoutObjectsIdIndexRoute,
+      ALayoutSettingsPersonalInformationIndexLazyRoute,
       ALayoutObjectsIdRoomsIndexRoute,
     ]),
     AIndexRoute,

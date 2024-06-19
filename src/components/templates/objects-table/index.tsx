@@ -24,6 +24,8 @@ import {
 import { CSSProperties, useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { useNavigate } from "@tanstack/react-router";
+import { ObjectT } from "@/api/Object/types";
 
 interface ObjectsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,6 +36,9 @@ export function ObjectsTable<TData, TValue>(
   props: ObjectsTableProps<TData, TValue>
 ) {
   const { columns, data } = props;
+  const navigate = useNavigate({
+    from: "/a/objects",
+  });
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -100,6 +105,22 @@ export function ObjectsTable<TData, TValue>(
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={(e) => {
+                    console.log(e.target);
+
+                    if (
+                      e.target.getAttribute("role") != "checkbox" &&
+                      e.target.getAttribute("role") != "menuitem"
+                    ) {
+                      const object = row.original as ObjectT;
+                      navigate({
+                        to: "/a/objects/$id/edit",
+                        params: {
+                          id: object.id.toString(),
+                        },
+                      });
+                    }
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

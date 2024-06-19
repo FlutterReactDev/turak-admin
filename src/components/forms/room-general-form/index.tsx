@@ -13,13 +13,23 @@ import { Input } from "@/components/ui/input";
 import { NestedForm } from "@/utils/nested-from";
 import { FC } from "react";
 import { RoomGeneralType } from "./schema";
-interface RoomGeneralFormProps {
+import { ObjectFormCard } from "../types";
+interface RoomGeneralFormProps extends ObjectFormCard {
   form: NestedForm<RoomGeneralType>;
 }
-export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({ form }) => {
+export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
+  form,
+  noBorder,
+  noTitle,
+}) => {
   const { control, path } = form;
   return (
-    <FormCard title="Основная информация" description="">
+    <FormCard
+      title="Основная информация"
+      description=""
+      noBorder={noBorder}
+      noTitle={noTitle}
+    >
       <FormField
         control={control}
         name={path("roomNameTypeId")}

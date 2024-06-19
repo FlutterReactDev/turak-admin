@@ -9,9 +9,10 @@ import { useForm } from "react-hook-form";
 import { object } from "yup";
 const roomNewSchema = object({
   roomType: roomTypeSchema,
-  general
+  general,
 });
 export const NewRooms = () => {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const prompt = usePrompt();
   const form = useForm();

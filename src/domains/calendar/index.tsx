@@ -51,7 +51,7 @@ export const CalendarPage = () => {
           <div className="grid grid-cols-3 gap-4 mt-5">
             {isSuccess &&
               data.result.map((data) => {
-                return <CalendarCard {...data} />;
+                return <CalendarCard key={data.id} {...data} />;
               })}
           </div>
         </PageContent>

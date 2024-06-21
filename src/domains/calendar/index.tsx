@@ -8,7 +8,6 @@ import {
   PageTitle,
 } from "@/components/organisms/page";
 
-import { AddBookingButton } from "@/components/templates/calendar-timeline/components/add-booking-button";
 import { Container } from "@medusajs/ui";
 
 export const CalendarPage = () => {
@@ -18,9 +17,7 @@ export const CalendarPage = () => {
       <Container>
         <PageHeader>
           <PageTitle>Календарь</PageTitle>
-          <PageHeaderButtons>
-            <AddBookingButton />
-          </PageHeaderButtons>
+          <PageHeaderButtons></PageHeaderButtons>
         </PageHeader>
 
         <PageContent>

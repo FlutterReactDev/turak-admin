@@ -1,4 +1,5 @@
 import { ObjectT } from "@/api/Object/types";
+import { App } from "@/components/templates/calendar/components/ui/app";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,18 +24,34 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getImageUrl } from "@/lib/get-image-url";
 import { UploadMediaType } from "@/types/shared";
+import { FocusModal } from "@medusajs/ui";
 import { EllipsisVertical } from "lucide-react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import { EffectCreative } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-export interface CalendarCardProps extends ObjectT {}
+export interface CalendarCardProps extends ObjectT {
+  selectedCalendarObject: {
+    id: number;
+    name: string;
+  }[];
+  onAddNewObject: (objectId: number) => void;
+}
 export const CalendarCard: FC<CalendarCardProps> = (props) => {
-  const { anObjectImages, name, anObjectFeeAdditionalService, anObjectDetail } =
-    props;
+  const {
+    anObjectImages,
+    name,
+    anObjectFeeAdditionalService,
+    anObjectDetail,
+    onAddNewObject,
+    selectedCalendarObject,
+    id,
+  } = props;
+  const [tabValue, setTabValue] = useState(id);
 
   return (
     <Card className="rounded-lg">
@@ -148,7 +165,42 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant={"outline"}>Перейти в календарь</Button>
+        <FocusModal>
+          <FocusModal.Trigger asChild>
+            <Button
+              onClick={() => {
+                onAddNewObject(id);
+              }}
+            >
+              Перейти в календарь
+            </Button>
+          </FocusModal.Trigger>
+          <Tabs
+            value={`${tabValue}`}
+            onValueChange={(value) => {
+              setTabValue(parseInt(value));
+            }}
+          >
+            <FocusModal.Content className="z-50">
+              <FocusModal.Header className="flex w-full items-center justify-start">
+                <TabsList>
+                  {selectedCalendarObject.map(({ id, name }) => {
+                    return <TabsTrigger value={`${id}`}>{name}</TabsTrigger>;
+                  })}
+                </TabsList>
+              </FocusModal.Header>
+              <FocusModal.Body className="py-2 ">
+                {selectedCalendarObject.map(({ id }) => {
+                  return (
+                    <TabsContent value={`${id}`}>
+                      <App objectId={id} />
+                    </TabsContent>
+                  );
+                })}
+              </FocusModal.Body>
+            </FocusModal.Content>
+          </Tabs>
+        </FocusModal>
       </CardFooter>
     </Card>
   );

@@ -30,6 +30,7 @@ export const ChangeObjectRoom = () => {
     useGetCurrenciesQuery();
   const { data: roomCategory, isSuccess: roomCategoryIsSuccess } =
     useGetRoomCategoriesQuery();
+    
   useEffect(() => {
     if (objectIsSuccess && objectsData.result.length && !currentObject) {
       setCurrentObject(objectsData.result[0].id);

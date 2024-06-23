@@ -21,7 +21,7 @@ function Index() {
         defaultLayout={undefined}
         defaultCollapsed={undefined}
       >
-        <Outlet />``
+        <Outlet />
       </Layout>
     </PrivateRoute>
   );

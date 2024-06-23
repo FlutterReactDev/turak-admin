@@ -1,10 +1,14 @@
+import { FC } from "react";
 import { Providers } from "../../providers";
 import { Calendar } from "./Calendar";
-
-export const App = () => {
+interface AppProps {
+  objectId: number;
+}
+export const App: FC<AppProps> = (props) => {
+  const { objectId } = props;
   return (
     <Providers>
-      <Calendar />
+      <Calendar objectId={objectId}/>
     </Providers>
   );
 };

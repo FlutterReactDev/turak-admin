@@ -9,9 +9,39 @@ import {
 } from "@/components/organisms/page";
 
 import { Container } from "@medusajs/ui";
+import { useState } from "react";
 
 export const CalendarPage = () => {
   const { data, isSuccess } = useGetAllObjectsQuery();
+  const [selectedCalendarObject, setSelectedCalendarObject] = useState<
+    {
+      name: string;
+      id: number;
+    }[]
+  >([]);
+
+  const onAddNewObject = (objectId: number) => {
+    setSelectedCalendarObject((prevState) => {
+      if (
+        prevState.some((objects) => {
+          return objects.id == objectId;
+        })
+      ) {
+        return [...prevState];
+      }
+
+      return [
+        ...prevState,
+        {
+          id: objectId,
+          name:
+            data?.result.find(({ id }) => {
+              return id == objectId;
+            })?.name || "",
+        },
+      ];
+    });
+  };
   return (
     <Page>
       <Container>
@@ -21,34 +51,17 @@ export const CalendarPage = () => {
         </PageHeader>
 
         <PageContent>
-          {/* <FocusModal>
-            <FocusModal.Trigger>
-              <Button>Календарь бронирования</Button>
-            </FocusModal.Trigger>
-            <Tabs>
-              <FocusModal.Content className="p-0 z-50 inset-0">
-                <FocusModal.Header className="flex w-full items-center justify-start">
-                  <TabsList>
-                    <TabsTrigger value="1">Account</TabsTrigger>
-                    <TabsTrigger value="2">Password</TabsTrigger>
-                  </TabsList>
-                  <NewBookingBtn />
-                </FocusModal.Header>
-                <FocusModal.Body className="py-2 ">
-                  <TabsContent value="1">
-                    <App />
-                  </TabsContent>
-                  <TabsContent value="2">
-                    <App />
-                  </TabsContent>
-                </FocusModal.Body>
-              </FocusModal.Content>
-            </Tabs>
-          </FocusModal> */}
           <div className="grid grid-cols-3 gap-4 mt-5">
             {isSuccess &&
               data.result.map((data) => {
-                return <CalendarCard key={data.id} {...data} />;
+                return (
+                  <CalendarCard
+                    selectedCalendarObject={selectedCalendarObject}
+                    onAddNewObject={onAddNewObject}
+                    key={data.id}
+                    {...data}
+                  />
+                );
               })}
           </div>
         </PageContent>

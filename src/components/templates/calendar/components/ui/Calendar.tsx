@@ -13,7 +13,7 @@ import {
 
 import { calendarActions } from "../..";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { FC, memo, useCallback, useEffect, useState } from "react";
 import {
   getColumnDays,
   getCommonSettings,
@@ -36,10 +36,57 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector } from "../shared/hooks/useAppSelecter";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-export const Calendar = memo(() => {
+import { useObjects } from "../../model/useObjects";
+import { useGetRoomsByAnObjectIdQuery } from "@/api/ObjectRoom";
+import { useGetCurrenciesQuery } from "@/api/Currencies";
+import { useGetRoomCategoriesQuery } from "@/api/RoomCategories";
+import { CalendarObject } from "../../model/types";
+interface CalendarProps {
+  objectId: number;
+}
+export const Calendar: FC<CalendarProps> = memo(({ objectId }) => {
   const dispatch = useDispatch();
+  const { setObjects } = useObjects();
+  const { data: roomsData, isSuccess: roomsIsSuccess } =
+    useGetRoomsByAnObjectIdQuery(objectId);
+  const { data: currencyData, isSuccess: currencyIsSuccess } =
+    useGetCurrenciesQuery();
+  const { data: roomCategory, isSuccess: roomCategoryIsSuccess } =
+    useGetRoomCategoriesQuery();
+  useEffect(() => {
+    if (
+      roomsIsSuccess &&
+      roomsData &&
+      currencyIsSuccess &&
+      roomCategoryIsSuccess
+    ) {
+      const objectsData: CalendarObject[] = roomsData.result.map(
+        ({
+          anObjectRoomDescription: { ownName },
+          anObjectRoomBookingSettings: { checkInAfter, checkOutAfter },
+          anObjectRoomBaseCost: { pricePerDay, currencyId },
+          id,
+          categoryType,
+        }) => ({
+          id: id,
+          name: ownName,
+          availability: [],
+          seasonsPrice: [],
+          address: "",
+          checkIn: checkInAfter,
+          checkOut: checkOutAfter,
+          objectDefaultPerDayCost: pricePerDay,
+          currency: currencyData.result.filter(({ id }) => id == currencyId)[0]
+            .symbol,
+          roomCategoryName: roomCategory.result.filter(
+            ({ value }) => value == categoryType
+          )[0].name,
+        })
+      );
 
+      setObjects(objectsData);
+    }
+  }, [roomsIsSuccess, roomsData, currencyIsSuccess, roomCategoryIsSuccess]);
   const objectsGroup = useSelector(getObjectGroup);
 
   const [isLessThan968] = useMediaQuery("(max-width: 968px)");
@@ -55,7 +102,6 @@ export const Calendar = memo(() => {
 
   useEffect(() => {
     window.addEventListener("resize", onResize);
-
     dispatch(calendarActions.initWidthWindow());
 
     return () => {
@@ -97,7 +143,6 @@ export const Calendar = memo(() => {
       >
         <GridItem area={"filter"}>
           <Stack alignItems={"center"} h="full" spacing={3}>
-            <ChangeObjectRoom />
             <Hide breakpoint="(max-width: 968px)">
               <SearchAvailibilityRoomsBtn />
               <SearchObject />

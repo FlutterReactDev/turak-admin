@@ -14,15 +14,14 @@ import { getObjectsBySearchAvailibility } from "../../model/selectors";
 import { EventClickProps } from "../../model/types";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { useAppDispatch } from "../shared/hooks/useAppDispatch";
+import { useAppSelector } from "../shared/hooks/useAppSelecter";
 import { GoToDateBtn } from "./GoToDateBtn";
 import { GoToMonth } from "./GoToMonth";
 import { GoTodayBtn } from "./GoTodayBtn";
 import { NewBookingBtn } from "./NewBookingBtn";
 import { SearchAvailibilityRoomsBtn } from "./SearchAvailibilityRoomsBtn";
 import { SearchComment } from "./SearchComment";
-import { TodayCalendarInfo } from "./TodayCalendarInfo";
-import { useAppDispatch } from "../shared/hooks/useAppDispatch";
-import { useAppSelector } from "../shared/hooks/useAppSelecter";
 
 export const ActionTop = memo(() => {
   const dispatch = useAppDispatch();

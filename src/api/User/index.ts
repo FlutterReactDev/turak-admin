@@ -11,7 +11,19 @@ const userApi = baseApiWithReAuth.injectEndpoints({
       }),
       providesTags: ["auth"],
     }),
+    update: build.mutation<
+      BaseResponse<null>,
+      Omit<User, "emaiIsVerified" | "lastLoginDateTime">
+    >({
+      query: (data) => ({
+        url: "/Update",
+        method: "POST",
+        body: data,
+      }),
+
+      invalidatesTags: ["auth"],
+    }),
   }),
 });
 
-export const { useGetAboutMeQuery } = userApi;
+export const { useGetAboutMeQuery, useUpdateMutation } = userApi;

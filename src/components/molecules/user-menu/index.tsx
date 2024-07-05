@@ -10,29 +10,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
+import { usePrompt } from "@/hooks/use-prompt";
 import { isFetchBaseQueryError } from "@/lib/server-error-handler";
+import { Link } from "@tanstack/react-router";
 import { ChevronDown, LogOut, User } from "lucide-react";
 
 export const UserMenu = () => {
   const { data } = useGetAboutMeQuery();
   const [logout, { isLoading }] = useLogoutMutation();
+
   const { toast } = useToast();
+  const promt = usePrompt();
   const onLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      if (isFetchBaseQueryError(error)) {
-        const errMsg = "error" in error ? error.error : error.data;
-        if (typeof errMsg == "string") {
-          toast({
-            variant: "destructive",
-            title: errMsg,
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: errMsg.message,
-          });
+    const yes = await promt({
+      title: "Вы уверены то хотите выйти?",
+    });
+
+    if (yes) {
+      try {
+        await logout().unwrap();
+        window.location.href = "/login";
+      } catch (error) {
+        if (isFetchBaseQueryError(error)) {
+          const errMsg = "error" in error ? error.error : error.data;
+          if (typeof errMsg == "string") {
+            toast({
+              variant: "destructive",
+              title: errMsg,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: errMsg.message,
+            });
+          }
         }
       }
     }
@@ -64,8 +75,10 @@ export const UserMenu = () => {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Настройки</DropdownMenuItem>
 
+        <Link to="/a/settings/personal-information">
+          <DropdownMenuItem>Настройки</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Button

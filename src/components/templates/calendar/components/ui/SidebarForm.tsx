@@ -147,7 +147,11 @@ export const SidebarForm = memo(() => {
           ],
           roomId: objectId,
         }).unwrap();
-
+        toast({
+          title: data.message,
+          description: data.details,
+          variant: "success",
+        });
         dispatch(
           calendarActions.createAvailability({
             id: 0,

@@ -6,7 +6,7 @@ import { ChevronLeft } from "lucide-react";
 
 export const ChangePasswordPage = () => {
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-1">
       <div className="w-full">
         <div className="mb-8">
           <Link to="/a/settings">

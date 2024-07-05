@@ -86,7 +86,11 @@ export function ObjectsTable<TData, TValue>(
               <TableRow key={headerGroup.id} className="sticky top-0">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="sticky top-0"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -109,7 +113,8 @@ export function ObjectsTable<TData, TValue>(
                     if (
                       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                       //@ts-ignore
-                      e.target.getAttribute("role") != "checkbox" && e.target.getAttribute("role") != "menuitem"
+                      e.target.getAttribute("role") != "checkbox" &&
+                      e.target.getAttribute("role") != "menuitem"
                     ) {
                       const object = row.original as ObjectT;
                       navigate({

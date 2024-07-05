@@ -16,15 +16,17 @@ interface GenderSelectProps {
 export const GenderSelect: FC<GenderSelectProps> = (props) => {
   const { onChange, value } = props;
   const { data } = useGetGendersQuery();
+  console.log(value);
+
   return (
     <Select
-      value={value ? `${value}` : undefined}
+      value={value != undefined ? `${value}` : undefined}
       onValueChange={(value) => {
         onChange(parseInt(value));
       }}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Ввберите Пол" />
+        <SelectValue placeholder="Выберите Пол" />
       </SelectTrigger>
       <SelectContent>
         {data?.result.map(({ value, name }) => {

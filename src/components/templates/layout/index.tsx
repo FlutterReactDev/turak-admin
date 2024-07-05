@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 import { FC, PropsWithChildren, useState } from "react";
+import { useLockBodyScroll } from "react-use";
 interface LayoutProps {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
@@ -20,7 +21,7 @@ export const Layout: FC<PropsWithChildren<LayoutProps>> = (props) => {
     children,
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-
+  useLockBodyScroll(true);
   return (
     <div className="h-dvh">
       <ResizablePanelGroup

@@ -3,7 +3,7 @@ import { Box } from "@/components/ui/box";
 
 export const RegisterPage = () => {
   return (
-    <Box className="w-full flex bg-muted items-center justify-center overflow-y-auto py-10">
+    <Box className="flex bg-muted items-center justify-center overflow-y-auto py-10 w-full">
       <RegisterForm />
     </Box>
   );

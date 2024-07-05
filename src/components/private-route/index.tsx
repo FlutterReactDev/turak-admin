@@ -4,8 +4,9 @@ import { Navigate, useRouterState } from "@tanstack/react-router";
 import { FC, PropsWithChildren } from "react";
 
 export const PrivateRoute: FC<PropsWithChildren> = ({ children }) => {
-  const { isSuccess, error, isError } = useGetAboutMeQuery();
+  const { isSuccess, error, isError, data } = useGetAboutMeQuery();
   const { location } = useRouterState();
+  console.log(data);
 
   if (isError && isFetchBaseQueryError(error)) {
     return (

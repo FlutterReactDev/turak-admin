@@ -1,4 +1,4 @@
-import { useGetObjectByIdQuery } from "@/api/Object";
+import { useEditMutation, useGetObjectByIdQuery } from "@/api/Object";
 import { ObjectT } from "@/api/Object/types";
 import { useGetRoomsByAnObjectIdQuery } from "@/api/ObjectRoom";
 import { addressFormSchema } from "@/components/forms/address-form/schema";
@@ -20,6 +20,7 @@ import { ObjectMapSection } from "@/components/organisms/object-map-section";
 import { ObjectMealSection } from "@/components/organisms/object-meal-section";
 import { RoomsTable } from "@/components/templates/rooms-table";
 import { columns } from "@/components/templates/rooms-table/columns";
+import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import {
@@ -27,12 +28,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 import { usePrompt } from "@/hooks/use-prompt";
+import { isFetchBaseQueryError } from "@/lib/server-error-handler";
 import { nestedForm } from "@/utils/nested-from";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft, Loader2, Plus } from "lucide-react";
 import { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { InferType, object } from "yup";
@@ -65,18 +68,22 @@ interface ObjectEditPageContentProps {
   refetch: () => void;
 }
 const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
-  const { id } = useParams({
+  const { id: objectId } = useParams({
     from: "/a/_layout/objects/$id/edit",
   });
   const {
     data: roomData,
 
     isSuccess,
-  } = useGetRoomsByAnObjectIdQuery(parseInt(id));
+  } = useGetRoomsByAnObjectIdQuery(parseInt(objectId));
+
+  const [edit, { isLoading }] = useEditMutation();
   const { data, refetch } = props;
   const navigate = useNavigate({
     from: "/a/objects/$id/edit",
   });
+
+  const { toast } = useToast();
 
   const prompt = usePrompt();
   const form = useForm({
@@ -132,6 +139,7 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
   const {
     formState: { isDirty },
     setValue,
+    getFieldState,
   } = form;
   const updateAddress = useCallback(() => {
     setValue("address", {
@@ -239,8 +247,103 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
     updateForm();
   }, [data, updateForm]);
 
-  const onChange = (data: ObjectType) => {
-    console.log(data);
+  const onChange = async (data: ObjectType) => {
+    const {
+      additionalComfort,
+      additionalService,
+      address: {
+        suggest: { addressName, id, point },
+      },
+      detail,
+      general: {
+        internetAccess,
+        name,
+        parking,
+        internetAccessSumm,
+        parkingSumm,
+        rating,
+      },
+      location: { cityId, countryId, regionId },
+      meal,
+      type: {
+        objectType: { objectType, objectTypeProperty },
+      },
+      images,
+    } = data;
+    try {
+      const { message, details } = await edit({
+        data: {
+          cityId,
+          countryId,
+          regionId,
+          building: "",
+          buildingId: id,
+          fullAddress: addressName,
+          id: 0,
+          latitude: point.lat,
+          longitude: point.lon,
+          name: name,
+          parking,
+
+          internetAccess: internetAccess,
+          internetAccessSumm: internetAccessSumm || 0,
+          anObjectDetail: {
+            id: 0,
+            ...detail,
+          },
+          anObjectTypeId: objectType,
+          anObjectPropertyTypeId: objectTypeProperty,
+
+          parkingSumm: parkingSumm || 0,
+          rating: rating || 0,
+          anObjectRooms: [],
+          anObjectAdditionalComfort: {
+            id: 0,
+            ...additionalComfort,
+          },
+          anObjectMeal: {
+            id: 0,
+            allInclusive: meal.allInclusive,
+            breakfast: meal.breakfast || 0,
+            breakfastService: meal.breakfastService || 0,
+            dinner: meal.dinner || 0,
+            dinnerService: meal.dinnerService || 0,
+            lunch: meal.lunch || 0,
+            lunchService: meal.lunchService || 0,
+          },
+          anObjectFeeAdditionalService: {
+            id: 0,
+            ...additionalService,
+          },
+          anObjectImages: images?.media || [],
+        },
+        anObjectId: parseInt(objectId),
+      }).unwrap();
+      toast({
+        title: message,
+        description: details,
+        variant: "success",
+      });
+    } catch (error) {
+      if (isFetchBaseQueryError(error)) {
+        const errMsg = "error" in error ? error.error : error.data;
+        if (typeof errMsg == "string") {
+          toast({
+            variant: "destructive",
+            title: errMsg,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: errMsg.message,
+          });
+        }
+      }
+    }
+  };
+
+  const onEdit = () => {
+    form.handleSubmit(onChange)();
   };
 
   const onBack = async () => {
@@ -264,6 +367,12 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
       });
     }
   };
+
+  const generalSectionState = getFieldState("general");
+  const detailSectionState = getFieldState("detail");
+  const mealSectionState = getFieldState("meal");
+  const additionalServiceSectionState = getFieldState("additionalService");
+  const additionalComfortSectionState = getFieldState("additionalComfort");
   return (
     <Form {...form}>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 w-full">
@@ -309,22 +418,39 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
                   <RoomsTable data={roomData.result} columns={columns} />
                 )}
               </Section>
-              <ObjectGeneralSection form={nestedForm(form, "general")} />
-              <ObjectDetailSection form={nestedForm(form, "detail")} />
+              <ObjectGeneralSection
+                form={nestedForm(form, "general")}
+                formState={generalSectionState}
+                onEdit={onEdit}
+              />
+              <ObjectDetailSection
+                form={nestedForm(form, "detail")}
+                formState={detailSectionState}
+                onEdit={onEdit}
+              />
 
-              <ObjectMealSection form={nestedForm(form, "meal")} />
+              <ObjectMealSection
+                formState={mealSectionState}
+                form={nestedForm(form, "meal")}
+                onEdit={onEdit}
+              />
+
               <ObjectAdditionalServiceSection
                 form={nestedForm(form, "additionalService")}
+                formState={additionalServiceSectionState}
+                onEdit={onEdit}
               />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
               <ObjectImageSection
                 form={nestedForm(form, "images")}
-                id={parseInt(id)}
+                id={parseInt(objectId)}
                 refetch={refetch}
               />
               <ObjectAdditionalComfortSection
                 form={nestedForm(form, "additionalComfort")}
+                formState={additionalComfortSectionState}
+                onEdit={onEdit}
               />
             </div>
           </div>
@@ -339,6 +465,11 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
           </div>
         </div>
       </div>
+      {isLoading && (
+        <Box className="fixed top-0 left-0 right-0 bottom-0 bg-black/20 flex items-center justify-center">
+          <Loader2 className="w-10 h-10 animate-spin" />
+        </Box>
+      )}
     </Form>
   );
 };

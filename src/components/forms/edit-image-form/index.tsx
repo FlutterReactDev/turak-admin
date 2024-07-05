@@ -271,8 +271,8 @@ export const EditImageForm: FC<EditImageFormProps> = ({
                   spaceBetween={10}
                   slidesPerView={"auto"}
                   freeMode={true}
-                  watchSlidesProgress={true}
-                  modules={[FreeMode, Navigation, Thumbs]}
+                  modules={[FreeMode, Thumbs]}
+                  className="w-full"
                 >
                   {fields.map(({ fileName }, i) => {
                     return (

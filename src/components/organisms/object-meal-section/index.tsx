@@ -4,16 +4,32 @@ import { Section } from "@/components/molecules/section";
 import { Button } from "@/components/ui/button";
 import { NestedForm } from "@/utils/nested-from";
 import { FC } from "react";
+import { FieldError } from "react-hook-form";
 
 interface ObjectMealSectionProps {
   form: NestedForm<ObjectMealType>;
+  formState: {
+    invalid: boolean;
+    isDirty: boolean;
+    isTouched: boolean;
+    isValidating: boolean;
+    error?: FieldError;
+  };
+  onEdit: () => void;
 }
-export const ObjectMealSection: FC<ObjectMealSectionProps> = ({ form }) => {
-  const { formState } = form;
+export const ObjectMealSection: FC<ObjectMealSectionProps> = ({
+  form,
+  formState,
+  onEdit,
+}) => {
   return (
     <Section
       title="Питание"
-      actions={<Button disabled={!formState.isDirty}>Сохранить</Button>}
+      actions={
+        <Button onClick={onEdit} disabled={!formState.isDirty}>
+          Сохранить
+        </Button>
+      }
     >
       <ObjectMealForm form={form} noBorder noTitle />
     </Section>

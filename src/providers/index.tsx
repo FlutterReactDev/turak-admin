@@ -7,7 +7,7 @@ import { SonnerComp } from "@/components/ui/sonner";
 export const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ReduxProvider>
-      <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+      <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
       <Toaster />
       <SonnerComp />
     </ReduxProvider>

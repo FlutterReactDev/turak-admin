@@ -26,6 +26,7 @@ import { Route as ALayoutObjectsIdRoomsIndexImport } from './routes/a/_layout/ob
 // Create Virtual Routes
 
 const AImport = createFileRoute('/a')()
+const VerifyEmailLazyImport = createFileRoute('/verify-email')()
 const RegisterLazyImport = createFileRoute('/register')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
@@ -44,6 +45,11 @@ const ARoute = AImport.update({
   path: '/a',
   getParentRoute: () => rootRoute,
 } as any)
+
+const VerifyEmailLazyRoute = VerifyEmailLazyImport.update({
+  path: '/verify-email',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/verify-email.lazy').then((d) => d.Route))
 
 const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
@@ -155,6 +161,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
     }
+    '/verify-email': {
+      preLoaderRoute: typeof VerifyEmailLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/a': {
       preLoaderRoute: typeof AImport
       parentRoute: typeof rootRoute
@@ -220,6 +230,7 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   LoginLazyRoute,
   RegisterLazyRoute,
+  VerifyEmailLazyRoute,
   ARoute.addChildren([
     ALayoutRoute.addChildren([
       ALayoutCalendarIndexRoute,

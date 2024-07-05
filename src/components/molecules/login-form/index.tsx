@@ -43,7 +43,7 @@ export function LoginForm() {
       if (parsedQueryString.from && typeof parsedQueryString.from == "string") {
         navigate({ to: parsedQueryString.from });
       } else {
-        navigate({ to: "/a/" });
+        navigate({ to: "/a/objects" });
       }
     } catch (error) {
       if (isFetchBaseQueryError(error)) {

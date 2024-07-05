@@ -32,7 +32,7 @@ import { useForm } from "react-hook-form";
 import { CountrySelect } from "../country-select";
 import { GenderSelect } from "../gender-select";
 import { LanguageSelect } from "../languages-select";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 export const RegisterForm = () => {
   const [register, { isLoading }] = useRegisterMutation();
@@ -253,6 +253,12 @@ export const RegisterForm = () => {
               {!isLoading && "Регистрация"}
             </Button>
           </CardFooter>
+          <div className="mb-4 text-center text-sm">
+            Есть аккаунта?{" "}
+            <Link to="/login" className="underline">
+              Войти
+            </Link>
+          </div>
         </form>
       </Form>
     </Card>

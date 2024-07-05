@@ -6,7 +6,6 @@ import { FC, PropsWithChildren } from "react";
 export const PrivateRoute: FC<PropsWithChildren> = ({ children }) => {
   const { isSuccess, error, isError, data } = useGetAboutMeQuery();
   const { location } = useRouterState();
-  console.log(data);
 
   if (isError && isFetchBaseQueryError(error)) {
     return (
@@ -18,6 +17,10 @@ export const PrivateRoute: FC<PropsWithChildren> = ({ children }) => {
         from={location.pathname}
       />
     );
+  }
+
+  if (isSuccess && !data.result.emaiIsVerified) {
+    return <Navigate to="/verify-email" />;
   }
 
   if (isSuccess) {

@@ -52,16 +52,18 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["auth"],
     }),
-    getVerifyEmail: build.query({
+    getVerifyEmail: build.query<BaseResponse<null>, void>({
       query: () => ({
         url: "/VerifyEmail",
         method: "GET",
       }),
     }),
-    verifyEmail: build.mutation({
+    verifyEmail: build.mutation<void, string>({
       query: (data) => ({
         url: "/VerifyEmail",
-        body: data,
+        params: {
+          token: data,
+        },
         method: "POST",
       }),
       invalidatesTags: ["auth"],

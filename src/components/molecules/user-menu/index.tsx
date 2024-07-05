@@ -76,7 +76,7 @@ export const UserMenu = () => {
         <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <Link to="/a/settings/personal-information">
+        <Link to="/a/settings">
           <DropdownMenuItem>Настройки</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />

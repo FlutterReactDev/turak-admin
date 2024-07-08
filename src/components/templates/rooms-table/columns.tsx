@@ -83,13 +83,11 @@ export const columns: ColumnDef<ObjectRoom>[] = [
         roomNameTypeId: number;
         anObjectId: number;
       }>();
+
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            <RoomNameBadge
-              anObjectPropertyTypeId={anObjectId}
-              value={roomNameTypeId}
-            />
+            <RoomNameBadge value={roomNameTypeId} anObjectId={anObjectId} />
           </span>
         </div>
       );

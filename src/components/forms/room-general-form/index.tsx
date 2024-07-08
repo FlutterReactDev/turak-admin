@@ -16,11 +16,13 @@ import { RoomGeneralType } from "./schema";
 import { ObjectFormCard } from "../types";
 interface RoomGeneralFormProps extends ObjectFormCard {
   form: NestedForm<RoomGeneralType>;
+  anObjectPropertyTypeId: number;
 }
 export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
   form,
   noBorder,
   noTitle,
+  anObjectPropertyTypeId,
 }) => {
   const { control, path } = form;
   return (
@@ -40,7 +42,7 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
               <RoomTypeNamesSelect
                 value={field.value}
                 onChange={field.onChange}
-                anObjectPropertyTypeId={0}
+                anObjectPropertyTypeId={anObjectPropertyTypeId}
               />
             </FormControl>
             <FormMessage />
@@ -54,7 +56,7 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
           <FormItem>
             <FormLabel>Уникальное название</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input {...field} placeholder="Уникальное название" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -67,7 +69,7 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
           <FormItem>
             <FormLabel>Своё название (необязательно)</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input {...field} placeholder="Своё название" />
             </FormControl>
             <FormDescription>
               Можете ввести ваше собственное название этой категории (будет
@@ -84,7 +86,11 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
           <FormItem>
             <FormLabel>Количество комнат в номере</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input
+                {...field}
+                type="number"
+                placeholder="Количество комнат в номере"
+              />
             </FormControl>
             <FormDescription>
               Только жилые комнаты — без учёта кухни, кухни-гостиной и других
@@ -101,7 +107,7 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
           <FormItem>
             <FormLabel>Площадь номера</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input {...field} type="number" placeholder="Площадь номера" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -127,7 +133,7 @@ export const RoomGeneralForm: FC<RoomGeneralFormProps> = ({
           <FormItem>
             <FormLabel>Этажей в здании</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input {...field} type="number" placeholder="Этажей в здании" />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -24,7 +24,7 @@ export const RoomTypeForm: FC<RoomTypeFormProps> = ({ form }) => {
         name={path("categoryType")}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Всё включено</FormLabel>
+            <FormLabel>Категория номера</FormLabel>
             <FormControl>
               <RoomCategoriesSelect
                 value={field.value}
@@ -42,7 +42,7 @@ export const RoomTypeForm: FC<RoomTypeFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel>Кол-во номеров этого типам</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input {...field} type="number" placeholder="Кол-во номеров этого типам"/>
             </FormControl>
             <FormMessage />
           </FormItem>

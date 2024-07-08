@@ -45,8 +45,6 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
   const {
     anObjectImages,
     name,
-    anObjectFeeAdditionalService,
-    anObjectDetail,
     onAddNewObject,
     selectedCalendarObject,
     id,
@@ -54,8 +52,8 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
   const [tabValue, setTabValue] = useState(id);
 
   return (
-    <Card className="rounded-lg">
-      <CardHeader className="p-0 rounded-t-lg overflow-hidden relative">
+    <Card className="rounded-lg flex h-44">
+      <CardHeader className="p-2 rounded-t-lg overflow-hidden relative w-[10%] rounded-md">
         <Swiper
           grabCursor={true}
           effect={"creative"}
@@ -74,13 +72,14 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
         >
           {anObjectImages?.map(({ fileName }) => {
             return (
-              <SwiperSlide key={fileName}>
+              <SwiperSlide key={fileName} className="h-40 rounded-lg">
                 <img
                   src={getImageUrl({
                     fileName,
                     type: UploadMediaType.OBJECT,
                   })}
                   alt={fileName}
+                  className="w-full h-full object-cover"
                 />
               </SwiperSlide>
             );
@@ -89,8 +88,8 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              className="absolute top-1 right-1 z-50"
-              variant={"secondary"}
+              className="absolute top-2 right-4 z-50 w-6 h-6"
+              variant={"outline"}
               size={"icon"}
             >
               <EllipsisVertical />
@@ -148,60 +147,53 @@ export const CalendarCard: FC<CalendarCardProps> = (props) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <CardContent className="mt-4">
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-1">
-            <CardTitle>{name}</CardTitle>
-            <CardDescription>
-              {anObjectFeeAdditionalService.detailComment}
-            </CardDescription>
-            <Badge className="bg-green">Сегодня свободно</Badge>
+      <div className="flex flex-col">
+        <CardContent className="mt-4">
+          <div className="flex justify-between">
+            <div className="flex flex-col gap-1">
+              <CardTitle>{name}</CardTitle>
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <Badge>
-              {anObjectDetail.checkInAfter} - {anObjectDetail.checkOutAfter}
-            </Badge>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <FocusModal>
-          <FocusModal.Trigger asChild>
-            <Button
-              onClick={() => {
-                onAddNewObject(id);
+        </CardContent>
+        <CardFooter>
+          <FocusModal>
+            <FocusModal.Trigger asChild>
+              <Button
+                onClick={() => {
+                  onAddNewObject(id);
+                }}
+              >
+                Перейти в календарь
+              </Button>
+            </FocusModal.Trigger>
+            <Tabs
+              value={`${tabValue}`}
+              onValueChange={(value) => {
+                setTabValue(parseInt(value));
               }}
             >
-              Перейти в календарь
-            </Button>
-          </FocusModal.Trigger>
-          <Tabs
-            value={`${tabValue}`}
-            onValueChange={(value) => {
-              setTabValue(parseInt(value));
-            }}
-          >
-            <FocusModal.Content className="z-50">
-              <FocusModal.Header className="flex w-full items-center justify-start">
-                <TabsList>
-                  {selectedCalendarObject.map(({ id, name }) => {
-                    return <TabsTrigger value={`${id}`}>{name}</TabsTrigger>;
+              <FocusModal.Content className="z-50">
+                <FocusModal.Header className="flex w-full items-center justify-start">
+                  <TabsList>
+                    {selectedCalendarObject.map(({ id, name }) => {
+                      return <TabsTrigger value={`${id}`}>{name}</TabsTrigger>;
+                    })}
+                  </TabsList>
+                </FocusModal.Header>
+                <FocusModal.Body className="py-2 ">
+                  {selectedCalendarObject.map(({ id }) => {
+                    return (
+                      <TabsContent value={`${id}`}>
+                        <App objectId={id} />
+                      </TabsContent>
+                    );
                   })}
-                </TabsList>
-              </FocusModal.Header>
-              <FocusModal.Body className="py-2 ">
-                {selectedCalendarObject.map(({ id }) => {
-                  return (
-                    <TabsContent value={`${id}`}>
-                      <App objectId={id} />
-                    </TabsContent>
-                  );
-                })}
-              </FocusModal.Body>
-            </FocusModal.Content>
-          </Tabs>
-        </FocusModal>
-      </CardFooter>
+                </FocusModal.Body>
+              </FocusModal.Content>
+            </Tabs>
+          </FocusModal>
+        </CardFooter>
+      </div>
     </Card>
   );
 };

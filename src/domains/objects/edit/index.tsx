@@ -18,6 +18,7 @@ import { ObjectGeneralSection } from "@/components/organisms/object-general-sect
 import { ObjectImageSection } from "@/components/organisms/object-image-section";
 import { ObjectMapSection } from "@/components/organisms/object-map-section";
 import { ObjectMealSection } from "@/components/organisms/object-meal-section";
+import { NewRoomsButton } from "@/components/templates/new-room-button";
 import { RoomsTable } from "@/components/templates/rooms-table";
 import { columns } from "@/components/templates/rooms-table/columns";
 import { Box } from "@/components/ui/box";
@@ -390,27 +391,17 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
               {data.name}
             </h1>
-
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button
-                size="sm"
-                disabled={!isDirty}
-                onClick={form.handleSubmit(onChange)}
-              >
-                Сохранить
-              </Button>
-            </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
+          <div className="grid gap-4 grid-cols-[minmax(0px,1fr)_450px] ">
+            <div className="grid grid-cols-1 gap-4">
               <ObjectMapSection form={nestedForm(form, "address")} />
               <Section
                 title="Комнаты"
                 actions={
                   <div className="flex gap-2">
-                    <Button>
-                      <Plus /> Добавить комнату
-                    </Button>
+                    <NewRoomsButton
+                      anObjectPropertyTypeId={data.anObjectPropertyTypeId}
+                    />
                   </div>
                 }
               >
@@ -441,7 +432,7 @@ const ObjectEditPageContent: FC<ObjectEditPageContentProps> = (props) => {
                 onEdit={onEdit}
               />
             </div>
-            <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
+            <div className="grid auto-rows-max items-start gap-4 lg:gaps-8">
               <ObjectImageSection
                 form={nestedForm(form, "images")}
                 id={parseInt(objectId)}

@@ -9,13 +9,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ObjectFormCard } from "../types";
 
-interface RoomViewFromWindowFormProps {
+interface RoomViewFromWindowFormProps extends ObjectFormCard {
   form: NestedForm<RoomViewFromWindowType>;
 }
 
 export const RoomViewFromWindowForm: FC<RoomViewFromWindowFormProps> = ({
   form,
+  noBorder,
+  noTitle,
 }) => {
   const { control, path } = form;
 
@@ -24,8 +27,8 @@ export const RoomViewFromWindowForm: FC<RoomViewFromWindowFormProps> = ({
       title="Вид из окон"
       description="Укажите, что можно увидеть из окон вашего объекта. В разделе
     «Фото» загрузите фотографии всех видов, которые вы отметили"
-      noBorder
-      noTitle
+      noBorder={noBorder}
+      noTitle={noTitle}
     >
       <div className="grid grid-cols-2 gap-2">
         <FormField

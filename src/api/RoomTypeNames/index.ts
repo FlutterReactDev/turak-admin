@@ -6,7 +6,7 @@ const roomTypeNamesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getRoomTypeNames: build.query<BaseResponse<RoomTypeNameType[]>, number>({
       query: (anObjectPropertyTypeId) => ({
-        url: "/RoomTypeNameType",
+        url: "/RoomTypeNames",
         method: "GET",
         params: {
           anObjectPropertyTypeId,

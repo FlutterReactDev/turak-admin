@@ -33,6 +33,10 @@ export const theme = {
         DEFAULT: "hsl(var(--green))",
         foreground: "hsl(var(--green-foreground))",
       },
+      yellow: {
+        DEFAULT: "hsl(var(--yellow))",
+        foreground: "hsl(var(--yellow-foreground))",
+      },
       secondary: {
         DEFAULT: "hsl(var(--secondary))",
         foreground: "hsl(var(--secondary-foreground))",

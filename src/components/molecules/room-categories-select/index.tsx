@@ -20,7 +20,7 @@ export const RoomCategoriesSelect: FC<RoomCategoriesSelectProps> = (props) => {
       onValueChange={(value) => onChange(parseInt(value))}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Категория номера" />
       </SelectTrigger>
       <SelectContent>
         {data?.result.map(({ value, name }) => {

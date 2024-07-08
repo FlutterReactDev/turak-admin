@@ -3,6 +3,9 @@ import { RoomAmenitiesForm } from "@/components/forms/room-amenities-form";
 import { roomAmenitiesSchema } from "@/components/forms/room-amenities-form/schema";
 import { RoomBathroomForm } from "@/components/forms/room-bathroom-form";
 import { roomBathroomSchema } from "@/components/forms/room-bathroom-form/schema";
+import { RoomCheckInCheckOutForm } from "@/components/forms/room-check-in-check-out-form";
+import { roomCheckInCheckOutSchema } from "@/components/forms/room-check-in-check-out-form/schema";
+import { RoomEquipmentForm } from "@/components/forms/room-equipment-form";
 import { roomEquipmentSchema } from "@/components/forms/room-equipment-form/schema";
 import { RoomGeneralForm } from "@/components/forms/room-general-form";
 import { roomGeneralSchema } from "@/components/forms/room-general-form/schema";
@@ -10,6 +13,10 @@ import { RoomKitchenEquipmentForm } from "@/components/forms/room-kitchen-equipm
 import { roomKitchenEquipmentSchema } from "@/components/forms/room-kitchen-equipment-form/schema";
 import { RoomPostingRulesForm } from "@/components/forms/room-posting-rules-form";
 import { postingRulesSchema } from "@/components/forms/room-posting-rules-form/schema";
+import { RoomBaseCostForm } from "@/components/forms/room-base-cost-form";
+import { roomBaseCostSchema } from "@/components/forms/room-base-cost-form/schema";
+import { RoomTypeForm } from "@/components/forms/room-type-form";
+import { roomTypeSchema } from "@/components/forms/room-type-form/schema";
 import { RoomViewFromWindowForm } from "@/components/forms/room-view-from-window-form";
 import { roomViewFromWindowSchema } from "@/components/forms/room-view-from-window-form/schema";
 import { Button } from "@/components/ui/button";
@@ -21,10 +28,11 @@ import { nestedForm } from "@/utils/nested-from";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FocusModal, ProgressStatus, ProgressTabs } from "@medusajs/ui";
 import { Plus } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { object } from "yup";
 enum Tab {
+  TYPE = "type",
   GENERAL = "general",
   BATHROOM = "bathroom",
   AMENITIES = "amenities",
@@ -32,12 +40,15 @@ enum Tab {
   EQUIPMENT = "equipment",
   KITCHEN_EQUIPMENT = "kitchenEquipment",
   POSTING_RULES = "postingRules",
+  CHECK_IN_CHECK_OUT = "checkInCheckOut",
+  PRICE = "price",
   MEDIA = "media",
 }
 type StepStatus = {
   [key in Tab]: ProgressStatus;
 };
 const roomNewSchema = object({
+  type: roomTypeSchema,
   general: roomGeneralSchema,
   bathroom: roomBathroomSchema,
   amenities: roomAmenitiesSchema,
@@ -45,10 +56,17 @@ const roomNewSchema = object({
   equipment: roomEquipmentSchema,
   kitchenEquipment: roomKitchenEquipmentSchema,
   postingRules: postingRulesSchema,
+  checkInCheckOut: roomCheckInCheckOutSchema,
+  baseCost: roomBaseCostSchema,
   images: imageSchema,
 });
+interface NewRoomsButtonProps {
+  anObjectPropertyTypeId: number;
+}
 
-export const NewRooms = () => {
+export const NewRoomsButton: FC<NewRoomsButtonProps> = ({
+  anObjectPropertyTypeId,
+}) => {
   const { toast } = useToast();
 
   const prompt = usePrompt();
@@ -64,6 +82,7 @@ export const NewRooms = () => {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>(Tab.GENERAL);
   const [status, setStatus] = useState<StepStatus>({
+    [Tab.TYPE]: "not-started",
     [Tab.GENERAL]: "not-started",
     [Tab.BATHROOM]: "not-started",
     [Tab.AMENITIES]: "not-started",
@@ -71,8 +90,14 @@ export const NewRooms = () => {
     [Tab.EQUIPMENT]: "not-started",
     [Tab.KITCHEN_EQUIPMENT]: "not-started",
     [Tab.POSTING_RULES]: "not-started",
+    [Tab.CHECK_IN_CHECK_OUT]: "not-started",
+    [Tab.PRICE]: "not-started",
     [Tab.MEDIA]: "not-started",
   });
+
+  const onTabChange = useCallback((value: Tab) => {
+    setTab(value);
+  }, []);
   const backButtonText = useMemo(() => {
     switch (tab) {
       case Tab.GENERAL:
@@ -93,6 +118,7 @@ export const NewRooms = () => {
     setOpen(false);
     setTab(Tab.GENERAL);
     setStatus({
+      [Tab.TYPE]: "not-started",
       [Tab.GENERAL]: "not-started",
       [Tab.AMENITIES]: "not-started",
       [Tab.BATHROOM]: "not-started",
@@ -100,6 +126,8 @@ export const NewRooms = () => {
       [Tab.KITCHEN_EQUIPMENT]: "not-started",
       [Tab.POSTING_RULES]: "not-started",
       [Tab.VIEW_FROM_WINDOW]: "not-started",
+      [Tab.CHECK_IN_CHECK_OUT]: "not-started",
+      [Tab.PRICE]: "not-started",
       [Tab.MEDIA]: "not-started",
     });
     reset();
@@ -133,34 +161,76 @@ export const NewRooms = () => {
         </Button>
       </FocusModal.Trigger>
 
-      <ProgressTabs>
+      <ProgressTabs
+        value={tab}
+        onValueChange={(tab) => onTabChange(tab as Tab)}
+      >
         <FocusModal.Content className="z-50">
           <FocusModal.Header className="flex w-full items-center justify-start">
-            <ScrollArea className="border-ui-border-base -my-2 ml-2 min-w-0 w-full border-l">
+            <ScrollArea
+              className="border-ui-border-base -my-2 ml-2 min-w-0 w-full border-l"
+              type="always"
+            >
               <ProgressTabs.List>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.TYPE}
+                >
+                  Тип объекта
+                </ProgressTabs.Trigger>
                 <ProgressTabs.Trigger
                   className="w-full min-w-0 max-w-[200px]"
                   value={Tab.GENERAL}
                 >
-                  1
+                  Основная информация
                 </ProgressTabs.Trigger>
                 <ProgressTabs.Trigger
                   className="w-full min-w-0 max-w-[200px]"
                   value={Tab.BATHROOM}
                 >
-                  2
+                  Ванная комната
                 </ProgressTabs.Trigger>
                 <ProgressTabs.Trigger
                   className="w-full min-w-0 max-w-[200px]"
                   value={Tab.AMENITIES}
                 >
-                  3
+                  Удобства
                 </ProgressTabs.Trigger>
                 <ProgressTabs.Trigger
                   className="w-full min-w-0 max-w-[200px]"
                   value={Tab.EQUIPMENT}
                 >
-                  4
+                  Оснащение
+                </ProgressTabs.Trigger>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.VIEW_FROM_WINDOW}
+                >
+                  Вид из комнаты
+                </ProgressTabs.Trigger>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.KITCHEN_EQUIPMENT}
+                >
+                  Кухонное оборудование
+                </ProgressTabs.Trigger>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.POSTING_RULES}
+                >
+                  Правила размещения
+                </ProgressTabs.Trigger>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.CHECK_IN_CHECK_OUT}
+                >
+                  Заезд / отъезд
+                </ProgressTabs.Trigger>
+                <ProgressTabs.Trigger
+                  className="w-full min-w-0 max-w-[200px]"
+                  value={Tab.PRICE}
+                >
+                  Цена
                 </ProgressTabs.Trigger>
               </ProgressTabs.List>
               <ScrollBar orientation="horizontal" />
@@ -169,34 +239,41 @@ export const NewRooms = () => {
           <FocusModal.Body className="flex h-full w-full flex-col items-center overflow-y-auto py-6 px-3">
             <Form {...form}>
               <ProgressTabs.Content
-                value={Tab.GENERAL}
-                className="h-full w-full"
+                value={Tab.TYPE}
+                className="h-full w-full max-w-[720px]"
               >
-                <RoomGeneralForm form={nestedForm(form, "general")} />
+                <RoomTypeForm form={nestedForm(form, "type")} />
+              </ProgressTabs.Content>
+              <ProgressTabs.Content
+                value={Tab.GENERAL}
+                className="h-full w-full max-w-[720px]"
+              >
+                <RoomGeneralForm
+                  form={nestedForm(form, "general")}
+                  anObjectPropertyTypeId={anObjectPropertyTypeId}
+                />
               </ProgressTabs.Content>
               <ProgressTabs.Content
                 value={Tab.BATHROOM}
-                className="h-full w-full"
+                className="h-full w-full max-w-[720px]"
               >
                 <RoomBathroomForm form={nestedForm(form, "bathroom")} />
               </ProgressTabs.Content>
               <ProgressTabs.Content
                 value={Tab.AMENITIES}
-                className="h-full w-full"
+                className="h-full w-full max-w-[720px]"
               >
                 <RoomAmenitiesForm form={nestedForm(form, "amenities")} />
               </ProgressTabs.Content>
               <ProgressTabs.Content
-                value={Tab.VIEW_FROM_WINDOW}
-                className="h-full w-full"
+                value={Tab.EQUIPMENT}
+                className="h-full w-full max-w-[720px]"
               >
-                <RoomViewFromWindowForm
-                  form={nestedForm(form, "viewFromWindow")}
-                />
+                <RoomEquipmentForm form={nestedForm(form, "equipment")} />
               </ProgressTabs.Content>
               <ProgressTabs.Content
                 value={Tab.VIEW_FROM_WINDOW}
-                className="h-full w-full"
+                className="h-full w-full max-w-[720px]"
               >
                 <RoomViewFromWindowForm
                   form={nestedForm(form, "viewFromWindow")}
@@ -204,17 +281,32 @@ export const NewRooms = () => {
               </ProgressTabs.Content>
               <ProgressTabs.Content
                 value={Tab.KITCHEN_EQUIPMENT}
-                className="h-full w-full"
+                className="h-full w-full max-w-[720px]"
               >
                 <RoomKitchenEquipmentForm
                   form={nestedForm(form, "kitchenEquipment")}
                 />
               </ProgressTabs.Content>
+
               <ProgressTabs.Content
                 value={Tab.POSTING_RULES}
-                className="h-full w-full"
+                className="h-full w-full max-w-[720px]"
               >
                 <RoomPostingRulesForm form={nestedForm(form, "postingRules")} />
+              </ProgressTabs.Content>
+              <ProgressTabs.Content
+                value={Tab.CHECK_IN_CHECK_OUT}
+                className="h-full w-full max-w-[720px]"
+              >
+                <RoomCheckInCheckOutForm
+                  form={nestedForm(form, "checkInCheckOut")}
+                />
+              </ProgressTabs.Content>
+              <ProgressTabs.Content
+                value={Tab.PRICE}
+                className="h-full w-full max-w-[1420px]"
+              >
+                <RoomBaseCostForm form={nestedForm(form, "baseCost")} />
               </ProgressTabs.Content>
             </Form>
           </FocusModal.Body>

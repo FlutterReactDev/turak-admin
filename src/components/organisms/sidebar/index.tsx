@@ -37,7 +37,7 @@ export const Sidebar: FC<SidebarProps> = (props) => {
             title: "Статистика",
             label: "0",
             icon: BarChartBig,
-            to: "/stats",
+            to: "stats",
           },
           {
             title: "Настройки",

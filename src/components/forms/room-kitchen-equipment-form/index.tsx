@@ -9,16 +9,24 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ObjectFormCard } from "../types";
 
-interface RoomKitchenEquipmentFormProps {
+interface RoomKitchenEquipmentFormProps extends ObjectFormCard {
   form: NestedForm<RoomKitchenEquipmentType>;
 }
 export const RoomKitchenEquipmentForm: FC<RoomKitchenEquipmentFormProps> = ({
   form,
+  noBorder,
+  noTitle,
 }) => {
   const { control, path } = form;
   return (
-    <FormCard title="Кухонное оборудование" description="" noBorder noTitle>
+    <FormCard
+      title="Кухонное оборудование"
+      description=""
+      noBorder={noBorder}
+      noTitle={noTitle}
+    >
       <div className="grid grid-cols-2 gap-2">
         <FormField
           control={control}

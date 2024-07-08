@@ -272,6 +272,9 @@ export const EditImageForm: FC<EditImageFormProps> = ({
                   slidesPerView={"auto"}
                   freeMode={true}
                   modules={[FreeMode, Thumbs]}
+                  centeredSlides
+                  centeredSlidesBounds
+                  centerInsufficientSlides
                   className="w-full"
                 >
                   {fields.map(({ fileName }, i) => {

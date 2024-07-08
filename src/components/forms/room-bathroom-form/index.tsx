@@ -38,7 +38,11 @@ export const RoomBathroomForm: FC<RoomBathroomFormProps> = ({
           <FormItem>
             <FormLabel>Количество ванных комнат с туалетом</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input
+                {...field}
+                type="number"
+                placeholder="Количество ванных комнат с туалетом"
+              />
             </FormControl>
             <FormMessage />
             <FormDescription>
@@ -54,7 +58,11 @@ export const RoomBathroomForm: FC<RoomBathroomFormProps> = ({
           <FormItem>
             <FormLabel>Количество ванных комнат без туалета</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input
+                {...field}
+                type="number"
+                placeholder="Количество ванных комнат без туалета"
+              />
             </FormControl>
             <FormMessage />
             <FormDescription>
@@ -70,7 +78,11 @@ export const RoomBathroomForm: FC<RoomBathroomFormProps> = ({
           <FormItem>
             <FormLabel>Количество отдельных туалетов</FormLabel>
             <FormControl>
-              <Input {...field} type="number" />
+              <Input
+                {...field}
+                type="number"
+                placeholder="Количество отдельных туалетов"
+              />
             </FormControl>
             <FormMessage />
             <FormDescription>Туалет с раковиной или без</FormDescription>

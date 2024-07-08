@@ -21,7 +21,7 @@ export const FloorTypeSelect: FC<FloorTypeSelectProps> = (props) => {
       onValueChange={(value) => onChange(parseInt(value))}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Этаж номера" />
       </SelectTrigger>
       <SelectContent>
         {data?.result.map(({ value, name }) => {

@@ -17,11 +17,11 @@ export const CurrencySelect: FC<CurrencySelectProps> = (props) => {
 
   return (
     <Select
-      value={`${value}`}
+      value={value ? `${value}` : undefined}
       onValueChange={(value) => onChange(parseInt(value))}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Валюта для расчётов" />
       </SelectTrigger>
       <SelectContent>
         {data?.result.map(({ id, name, symbol }) => {

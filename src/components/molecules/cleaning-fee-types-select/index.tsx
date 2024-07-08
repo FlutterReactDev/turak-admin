@@ -18,11 +18,11 @@ export const CleaningFeeTypesSelect: FC<CleaningFeeTypesSelectProps> = (
   const { data } = useGetCleaningFeeTypesQuery();
   return (
     <Select
-      value={`${value}`}
+      value={value ? `${value}` : undefined}
       onValueChange={(value) => onChange(parseInt(value))}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Финальная уборка" />
       </SelectTrigger>
       <SelectContent>
         {data?.result.map(({ value, name }) => {
